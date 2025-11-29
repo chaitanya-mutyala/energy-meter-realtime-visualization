@@ -22,7 +22,7 @@ function Header() {
   ]
 
   return (
-    <header className='w-full shadow-lg sticky top-0 z-50'>
+    <header className='w-full shadow-lg top-0 z-50'>
       {/* ========================================
         1. Top Banner Section (Dark Background)
         ========================================

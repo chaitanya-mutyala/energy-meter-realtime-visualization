@@ -1,1 +1,9 @@
 @import "tailwindcss";
+.recharts-wrapper:focus,
+.recharts-surface:focus,
+.recharts-layer:focus,
+.recharts-cartesian-grid:focus,
+.recharts-tooltip-wrapper:focus {
+    outline: none !important;
+    border: none !important;
+}
