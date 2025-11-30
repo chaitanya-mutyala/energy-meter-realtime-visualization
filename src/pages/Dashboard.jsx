@@ -201,11 +201,11 @@ export default function Dashboard() {
                     <MetricCard label="Voltage" value={latest?.voltage?.toFixed(1)} unit="V" />
                     <MetricCard label="Current" value={latest?.current?.toFixed(2)} unit="A" />
                     <MetricCard label="Active Power" value={latest?.activeKW?.toFixed(2)} unit="kW" />
-                    <MetricCard label="Reactive Power" value={latest?.reactiveKVar?.toFixed(2)} unit="kVAR" />
-                    <MetricCard label="Apparent Power" value={latest?.apparentKVA?.toFixed(2)} unit="kVA" />
+                    <MetricCard label="Apparent Power" value={latest?.reactiveKVar?.toFixed(2)} unit="kVA" />
+                    <MetricCard label="Reactive Power" value={latest?.apparentKVA?.toFixed(2)} unit="kVAR" />
                     <MetricCard label="Power Factor" value={latest?.pf?.toFixed(2)} unit="" />
                     <MetricCard label="Frequency" value={latest?.freq?.toFixed(2)} unit="Hz" />
-                    <MetricCard label="Energy Used" value={latest?.importKWh?.toFixed(2)} unit="kWh" />
+                    <MetricCard label="Total Energy Used" value={latest?.importKWh?.toFixed(2)} unit="kWh" />
                 </div>
 
                 {/* CHARTS */}
@@ -240,7 +240,7 @@ export default function Dashboard() {
                                 <YAxis />
                                 <Tooltip />
                                 <Bar
-                                    dataKey="importKWh"
+                                    dataKey="energyUsedtill"
                                     fill="#3b82f6"
                                     radius={[6, 6, 0, 0]}
                                 />
@@ -294,7 +294,7 @@ export default function Dashboard() {
                         </p>
 
                         <p className="text-center text-sm text-gray-500 mt-1">
-                            Max: 5 A
+                            Max: 2.5 A
                         </p>
                     </div>
                 </div>
