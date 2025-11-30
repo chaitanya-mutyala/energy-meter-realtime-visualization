@@ -27,7 +27,7 @@ const FIELD_MAP = {
     apparentKVA: "field5",
     pf: "field6",
     freq: "field7",
-    importKWh: "field8",
+    EnergyUsed: "field8",
 };
 
 // Premium metric card
@@ -109,7 +109,7 @@ export default function Dashboard() {
                 apparentKVA: parseField(lastJson, FIELD_MAP.apparentKVA),
                 pf: parseField(lastJson, FIELD_MAP.pf),
                 freq: parseField(lastJson, FIELD_MAP.freq),
-                importKWh: parseField(lastJson, FIELD_MAP.importKWh),
+                EnergyUsed: parseField(lastJson, FIELD_MAP.EnergyUsed),
             };
 
             // Update needle animation
@@ -127,7 +127,7 @@ export default function Dashboard() {
                 return {
                     timeLabel: label,
                     activeKW: parseField(f, FIELD_MAP.activeKW),
-                    importKWh: parseField(f, FIELD_MAP.importKWh),
+                    EnergyUsed: parseField(f, FIELD_MAP.EnergyUsed),
                 };
             });
 
@@ -205,7 +205,7 @@ export default function Dashboard() {
                     <MetricCard label="Reactive Power" value={latest?.apparentKVA?.toFixed(2)} unit="kVAR" />
                     <MetricCard label="Power Factor" value={latest?.pf?.toFixed(2)} unit="" />
                     <MetricCard label="Frequency" value={latest?.freq?.toFixed(2)} unit="Hz" />
-                    <MetricCard label="Total Energy Used" value={latest?.importKWh?.toFixed(2)} unit="kWh" />
+                    <MetricCard label="Total Energy Used" value={latest?.EnergyUsed?.toFixed(2)} unit="kWh" />
                 </div>
 
                 {/* CHARTS */}
@@ -240,7 +240,7 @@ export default function Dashboard() {
                                 <YAxis />
                                 <Tooltip />
                                 <Bar
-                                    dataKey="energyUsedtill"
+                                    dataKey="EnergyUsed"
                                     fill="#3b82f6"
                                     radius={[6, 6, 0, 0]}
                                 />
