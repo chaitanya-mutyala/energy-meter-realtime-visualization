@@ -1,30 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-// Removed 'Logo' import as it's no longer used
 
 function Footer() {
-    // Define the custom colors for headings and text
     const azureColor = { color: '#007FFF' }; 
-    const ivoryTextColor = 'text-gray-200'; // Using a light Tailwind class for contrast
+    const ivoryTextColor = 'text-gray-200';
 
     return (
         <section 
             className="relative overflow-hidden pt-10 pb-6 border border-t-2 border-t-black"
-            style={{ backgroundColor: '#2A364F' }} 
+            style={{ backgroundColor: '#2A364F' }}
         >
             <div className="relative z-10 mx-auto max-w-7xl px-4">
                 <div className="-m-6 flex flex-wrap lg:justify-center">
-                    
-                    {/* 1. Tech Stack Column (3/12 width) */}
+
+                    {/* 1. Tech Stack Column */}
                     <div className="w-full p-6 md:w-1/2 lg:w-3/12">
                         <div className="h-full">
-                            <h3 className={`tracking-px mb-6 text-xs font-semibold uppercase`} style={azureColor}>
+                            <h3 className="tracking-px mb-6 text-xs font-semibold uppercase" style={azureColor}>
                                 Tech Stack
                             </h3>
                             <ul>
                                 <li className="mb-3">
                                     <p className={`text-base font-medium ${ivoryTextColor}`}>
-                                        React, Vite &amp; Tailwind CSS
+                                        React, Vite & Tailwind CSS
                                     </p>
                                 </li>
                                 <li className="mb-3">
@@ -41,10 +39,10 @@ function Footer() {
                         </div>
                     </div>
 
-                    {/* 2. Project Resources Column (3/12 width) */}
+                    {/* 2. Project Resources Column */}
                     <div className="w-full p-6 md:w-1/2 lg:w-3/12">
                         <div className="h-full">
-                            <h3 className={`tracking-px mb-6 text-xs font-semibold uppercase`} style={azureColor}>
+                            <h3 className="tracking-px mb-6 text-xs font-semibold uppercase" style={azureColor}>
                                 Resources
                             </h3>
                             <ul>
@@ -56,33 +54,36 @@ function Footer() {
                                         Live Visualization Dashboard
                                     </Link>
                                 </li>
+
+                                {/* UPDATED GITHUB LINK */}
                                 <li className="mb-3">
                                     <a
                                         className={`text-base font-medium ${ivoryTextColor} hover:text-white transition-colors duration-200`}
-                                        href="https://github.com/hiteshchoudhary/chai-aur-react/tree/main/12MegaBlog" // Replace with your actual GitHub URL
+                                        href="https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         Project Repository (GitHub)
                                     </a>
                                 </li>
+
                                 <li>
                                     <Link
                                         className={`text-base font-medium ${ivoryTextColor} hover:text-white transition-colors duration-200`}
                                         to="/documentation"
                                     >
-                                        API Endpoints &amp; Status
+                                        API Endpoints & Status
                                     </Link>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
-                    {/* 3. Contact Us / Legal Column (3/12 width) */}
+                    {/* 3. Contact & Legal Column */}
                     <div className="w-full p-6 md:w-1/2 lg:w-3/12">
                         <div className="h-full">
-                            <h3 className={`tracking-px mb-6 text-xs font-semibold uppercase`} style={azureColor}>
-                                Contact &amp; Legal
+                            <h3 className="tracking-px mb-6 text-xs font-semibold uppercase" style={azureColor}>
+                                Contact & Legal
                             </h3>
                             <ul>
                                 <li className="mb-3">
@@ -103,7 +104,7 @@ function Footer() {
                                         className={`text-base font-medium ${ivoryTextColor} hover:text-white transition-colors duration-200`}
                                         to="/terms"
                                     >
-                                        Data Privacy &amp; Terms
+                                        Data Privacy & Terms
                                     </Link>
                                 </li>
                             </ul>
@@ -111,13 +112,12 @@ function Footer() {
                     </div>
                 </div>
 
-                {/* Separator and Copyright */}
+                {/* Copyright */}
                 <div className="mt-8 pt-6 border-t border-gray-700">
                     <p className={`text-sm text-center text-gray-400 ${ivoryTextColor}`}>
-                        &copy; 2025 Energy Monitoring and Prediction for Smart Buildings: NITAP
+                        &copy; 2025 Energy Monitoring and Load Prediction System – NIT Andhra Pradesh
                     </p>
                 </div>
-
             </div>
         </section>
     )

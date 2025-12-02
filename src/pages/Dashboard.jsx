@@ -16,7 +16,7 @@ import { RefreshCw } from "lucide-react";
 
 // ThingSpeak config
 const CHANNEL_ID = 3100444;
-const READ_API_KEY = "I2Y7E78X6NGBS2UW";
+const READ_API_KEY = import.meta.env.VITE_THINGSPEAK_READ_API_KEY;
 
 // Mapping fields
 const FIELD_MAP = {
