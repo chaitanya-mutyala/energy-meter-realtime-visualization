@@ -12,9 +12,8 @@ import Login from './pages/Login.jsx'
 
 import Signup from './pages/Signup'
 
-import Dashboard from './pages/Dashboard.jsx'
 import Add_new from './pages/Add-new.jsx'
-
+import Dash from './pages/Dash.jsx'
 
 const router = createBrowserRouter([
   {
@@ -43,21 +42,12 @@ const router = createBrowserRouter([
         },
         {
             path: "/dashboard",
-            element: (
-                <AuthLayout authentication>
-                    <Dashboard />
-                </AuthLayout>
-            ),
+            element: 
+                
+                    <Dash />
+                
         },
-        {
-            path: "/add_new",
-            element: (
-                <AuthLayout authentication>
-                    
-                    <Add_new />
-                </AuthLayout>
-            ),
-        },
+        
         
     ],
 },

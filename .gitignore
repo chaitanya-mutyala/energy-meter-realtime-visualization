@@ -24,3 +24,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+Add-new.jsx
+Firebase.js
+Firebasetwo.js
+generatebuildingmatrices.js
+compute.js
+Buildweeklydata.jsx
