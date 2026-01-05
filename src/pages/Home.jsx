@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react"; // Added useState
 import { useNavigate } from "react-router-dom";
 import Container from "../components/container/Container.jsx";
 
@@ -11,19 +11,29 @@ import { Zap, Activity, BarChart, ShieldCheck } from "lucide-react";
 function Home() {
   const navigate = useNavigate();
   const timeoutRef = useRef(null);
+  
+  // ================= TIMER STATE =================
+  const REDIRECT_TIME_MS = 60000; 
+  const [timeLeft, setTimeLeft] = useState(REDIRECT_TIME_MS / 1000);
 
-  // ================= AUTO-REDIRECT LOGIC =================
   useEffect(() => {
-    const REDIRECT_TIME = 120000; // 60 Seconds
-
+    // 1. Logic for the actual navigation redirect
     const startTimer = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         navigate("/dashboard");
-      }, REDIRECT_TIME);
+      }, REDIRECT_TIME_MS);
     };
 
-    const resetTimer = () => startTimer();
+    // 2. Logic for the visible countdown clock
+    const countdownInterval = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    const resetTimer = () => {
+      startTimer();
+      setTimeLeft(REDIRECT_TIME_MS / 1000); // Reset visual clock
+    };
 
     startTimer();
 
@@ -33,6 +43,7 @@ function Home() {
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      clearInterval(countdownInterval);
       window.removeEventListener("mousemove", resetTimer);
       window.removeEventListener("keydown", resetTimer);
       window.removeEventListener("click", resetTimer);
@@ -80,7 +91,17 @@ function Home() {
           >
             Launch Dashboard
           </button>
-          <p className="mt-6 text-slate-500 text-xs tv:text-xl italic">Auto-redirecting to live data in 120s...</p>
+          <div className="mt-8 flex flex-col items-center">
+            <div className="w-64 tv:w-[500px] h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-emerald-500 transition-all duration-1000 ease-linear"
+                style={{ width: `${(timeLeft / 60) * 100}%` }}
+              ></div>
+            </div>
+            <p className="mt-4 text-emerald-500 font-mono text-sm tv:text-3xl animate-pulse">
+              System initializing... Redirecting in <span className="font-bold text-white">{timeLeft}s</span>
+            </p>
+          </div>
         </div>
       </div>
 

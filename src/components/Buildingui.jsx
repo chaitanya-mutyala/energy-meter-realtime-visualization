@@ -25,7 +25,7 @@ export default function BuildingDashboard({ meterId }) {
       if (mounted) setData(res);
     };
     load();
-    const intervalId = setInterval(load, 60_000);
+    const intervalId = setInterval(load, 180_000);
     return () => {
       mounted = false;
       clearInterval(intervalId);
@@ -88,15 +88,25 @@ export default function BuildingDashboard({ meterId }) {
   </div>
 </div>
       {/* Main Metrics */}
-      <div className="grid grid-cols-3 gap-4 mt-2 tv:gap-12">
-        <Metric icon={BoltIcon} title="Active Power" value={data.activePower} unit="kW" />
-        <Metric icon={LightBulbIcon} title="Reactive Power" value={data.reactivePower} unit="kVAR" sparkcolor={meterId === "meter_001" ? "amber" : "blue"} />
-        <Metric icon={ChartBarIcon} title="Peak Load Yesterday" value={data.yesterdayPeakKVA} unit="kVA" />
-        <Metric icon={ArrowTrendingUpIcon} title="Energy Used Today" value={data.energyToday} unit="kWh" />
-        <Metric icon={CalendarDaysIcon} title="Energy Used This Month" value={data.energyMonth} unit="kWh" sparkcolor={meterId === "meter_001" ? "amber" : "blue"} />
-         <Metric icon={FireIcon} title="Monthly Peak Load" value={data.monthlyPeakKVA} unit="kVA" />
+      <div className="flex flex-col lg:flex-row gap-4 tv:gap-12 mt-4">
         
-      </div>
+        {/* Left Side: 4 Standard Metrics (2x2 Grid) */}
+        <div className="lg:w-2/3 grid grid-cols-2 gap-4 tv:gap-12">
+          <Metric icon={BoltIcon} title="Active Power" icolor="text-amber-400" value={data.activePower} unit="kW" />
+          <Metric icon={LightBulbIcon} title="Reactive Power" icolor="text-cyan-400" value={data.reactivePower} unit="kVAR" sparkcolor={meterId === "meter_001" ? "amber" : "blue"} />
+          <Metric icon={ArrowTrendingUpIcon} title="Energy Used Today" icolor="text-emerald-400" value={data.energyToday} unit="kWh" />
+          <Metric icon={CalendarDaysIcon} title="Energy Used This Month" icolor="text-blue-400" value={data.energyMonth} unit="kWh" sparkcolor={meterId === "meter_001" ? "amber" : "blue"} />
+        </div>
+
+        {/* Right Side: 2 Speedometer Metrics (Stacked) */}
+        <div className="lg:w-1/3">
+          <PeakSpeedometer 
+            yesterdayPeak={data.yesterdayPeakKVA} 
+            monthlyPeak={data.monthlyPeakKVA} 
+            unit="kVA"
+          />
+        </div>
+      </div>
 
       {/* System Parameters */}
       <div className="grid grid-cols-4 gap-4 tv:gap-10 mt-4 tv:mt-16">
@@ -115,13 +125,13 @@ export default function BuildingDashboard({ meterId }) {
   );
 }
 
-function Metric({ title, value, unit, icon: Icon, sparkcolor = "green" }) {
+function Metric({ title, icolor, value, unit, icon: Icon, sparkcolor = "green" }) {
   const safe = typeof value === "number" ? value.toFixed(2) : "--";
 
   return (
     <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-4 tv:p-12 shadow-lg flex flex-col justify-between border border-white/5">
       <div className="flex items-center gap-2 tv:gap-4 text-slate-300 text-xl tv:text-3xl">
-        <Icon className="w-5 h-5 tv:w-10 tv:h-10 text-slate-200" />
+        <Icon className={`w-5 h-5 tv:w-10 tv:h-10 ${icolor}`} />
         {title}
       </div>
 
@@ -150,4 +160,76 @@ function SysCard({ title, value, unit = "" }) {
       </div>
     </div>
   );
+}
+function PeakSpeedometer({ yesterdayPeak, monthlyPeak, unit }) {
+  const monthly = monthlyPeak || 1;
+  // Your logic: 90% fill when yesterday == monthly
+  const fillPercentage = Math.min(((0.9 * yesterdayPeak) / monthly) * 100, 100);
+  
+  // Math for a 75% circular ring
+  // Circumference for r=45 is ~283. We use 75% of that (~212)
+  const totalLength = 282;
+  const strokeDash = (fillPercentage * 212) / 100;
+
+  return (
+    <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-1 tv:p-10 h-full flex flex-col items-center justify-center border border-white/10 shadow-inner">
+      <div className="flex items-center gap-3 text-slate-300 text-lg tv:text-3xl mb-8">
+        <ChartBarIcon className="w-6 h-6 tv:w-10 tv:h-10 text-cyan-400" />
+        Peak Load Performance
+      </div>
+
+      <div className="relative flex items-center justify-center">
+        {/* The SVG Ring */}
+        <svg className="w-40 h-40 tv:w-80 tv:h-80 transform -rotate-225" viewBox="0 0 100 100">
+          {/* Gray Background Track (75% of circle) */}
+          <circle
+            cx="50" cy="50" r="45"
+            fill="none"
+            stroke="#1e293b"
+            strokeWidth="8"
+            strokeDasharray="212 282"
+            strokeLinecap="round"
+          />
+          {/* Active Progress Track */}
+          <circle
+            cx="50" cy="50" r="45"
+            fill="none"
+            stroke="url(#ringGradient)"
+            strokeWidth="10"
+            strokeDasharray={`${strokeDash} 282`}
+            strokeLinecap="round"
+            className="transition-all duration-1000 ease-out"
+          />
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+  <stop offset="0%" stopColor="#f59e0b" />   {/* Amber 500 */}
+  <stop offset="50%" stopColor="#ef4444" />  {/* Red 500 */}
+  <stop offset="100%" stopColor="#8b5cf6" /> {/* Violet 500 */}
+</linearGradient>
+          </defs>
+        </svg>
+
+        {/* Centered Data */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-sm tv:text-xl text-slate-300 uppercase font-medium">Peak</span>
+          <span className="text-4xl tv:text-8xl font-bold leading-none my-1">
+            {yesterdayPeak?.toFixed(1)}
+          </span>
+          <span className="text-md tv:text-2xl text-slate-300 font-light">{unit}</span>
+        </div>
+      </div>
+
+      {/* Footer labels tightened */}
+      <div className="w-full mt-2 space-y-2 tv:space-y-4 border-t border-white/5 pt-6">
+        <div className="flex justify-between items-center px-2">
+          <span className="text-md tv:text-xl text-slate-200">Yesterday Max Load</span>
+          <span className="text-md tv:text-2xl font-semibold">{yesterdayPeak?.toFixed(1)} {unit}</span>
+        </div>
+        <div className="flex justify-between items-center px-2">
+          <span className="text-md tv:text-xl text-slate-200">This Month Max Load</span>
+          <span className="text-md tv:text-2xl font-mono text-emerald-400">{monthlyPeak?.toFixed(1)} {unit}</span>
+        </div>
+      </div>
+    </div>
+  );
 }

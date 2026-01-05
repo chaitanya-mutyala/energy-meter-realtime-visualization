@@ -36,7 +36,7 @@ function Header() {
               <img
                 src={logo}
                 alt="NIT Andhra Pradesh"
-                className="h-auto max-h-20 object-contain w-full"
+                className="h-auto max-h-12 object-contain w-full"
               />
             </Link>
           </nav>

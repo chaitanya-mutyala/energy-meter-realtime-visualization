@@ -44,7 +44,9 @@ const router = createBrowserRouter([
             path: "/dashboard",
             element: 
                 
+                <AuthLayout authentication={true}>
                     <Dash />
+                </AuthLayout>
                 
         },
         

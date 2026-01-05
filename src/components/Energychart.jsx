@@ -39,7 +39,7 @@ export default function EnergyConsumptionChart({ data }) {
     return (
         <div className="bg-slate-900/70 border border-slate-800 rounded-xl tv:rounded-3xl p-6 tv:p-12 shadow-2xl flex flex-col h-full">
             <h3 className="flex items-center gap-2 tv:gap-4 text-md tv:text-3xl uppercase tracking-wider text-slate-200 mb-4 tv:mb-10">
-                <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-slate-200" />
+                <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-amber-400" />
                 <span>Energy Consumption (Last 7 Days)</span>
             </h3>
 
@@ -56,6 +56,19 @@ export default function EnergyConsumptionChart({ data }) {
                             bottom: isTV ? 40 : 20 
                         }}
                     >
+    <defs>
+    {/* Gradient for SRK Building - AMBER */}
+    <linearGradient id="colorB1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.9}/>
+        <stop offset="95%" stopColor="#d97706" stopOpacity={0.2}/>
+    </linearGradient>
+
+    {/* Gradient for APJ Building - CYAN */}
+    <linearGradient id="colorB2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.9}/>
+        <stop offset="95%" stopColor="#1d4ed8" stopOpacity={0.2}/>
+    </linearGradient>
+</defs>
                         <XAxis
                             dataKey="day"
                             stroke="#d9e0e8ff"
@@ -105,7 +118,7 @@ export default function EnergyConsumptionChart({ data }) {
                         <Bar
                             dataKey="building1"
                             name="SRK Academic Complex"
-                            fill="#e7a93dff"
+                            fill="url(#colorB1)"
                             radius={isTV ? [8, 8, 0, 0] : [4, 4, 0, 0]}
                             barSize={isTV ? 60 : undefined}
                         />
@@ -113,7 +126,7 @@ export default function EnergyConsumptionChart({ data }) {
                         <Bar
                             dataKey="building2"
                             name="APJ Laboratory Complex"
-                            fill="#2276fdff"
+                            fill="url(#colorB2)"
                             radius={isTV ? [8, 8, 0, 0] : [4, 4, 0, 0]}
                             barSize={isTV ? 60 : undefined}
                         />

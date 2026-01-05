@@ -83,17 +83,19 @@ export default function Dash() {
       >
         {/* ================= METERS SECTION ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 tv:gap-12">
-          <div className="w-full">
-            <BuildingDashboard meterId="meter_001" />
-          </div>
-          <div className="w-full">
-            <BuildingDashboard meterId="meter_002" />
-          </div>
+          <div className="w-full border-2 border-amber-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+    <BuildingDashboard meterId="meter_001" />
+  </div>
+
+  {/* Meter 2: APJ Laboratory Complex (Cyan/Blue Theme) */}
+  <div className="w-full border-2 border-blue-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+    <BuildingDashboard meterId="meter_002" />
+  </div>
         </div>
 
         {/* ================= CHARTS SECTION ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 tv:gap-12">
-          <div className="w-full min-h-[400px] tv:min-h-[500px]">
+          <div className="w-full min-h-[400px] tv:min-h-[500px] border-2 border-cyan-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
             <EnergyConsumptionChart data={weeklyEnergyData} />
           </div>
           
