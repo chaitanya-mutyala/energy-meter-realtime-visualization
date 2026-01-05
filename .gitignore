@@ -31,3 +31,6 @@ Firebasetwo.js
 generatebuildingmatrices.js
 compute.js
 Buildweeklydata.jsx
+Dashboard.jsx
+tailwind.config.js
+.env

@@ -28,6 +28,8 @@ async function initTodayFromFirebase(db, meterId) {
 /* =========================================================
    2️⃣ FETCH TODAY META (CHEAP – DAILY)
    ========================================================= */
+/* Firebasethree.js */
+
 async function fetchTodayMeta(db, meterId) {
   const today = TODAY_DATE[meterId];
   if (!today) throw new Error("TODAY_DATE missing");
@@ -39,21 +41,25 @@ async function fetchTodayMeta(db, meterId) {
 
   META_CACHE[meterId] = snap.val();
 
-  /* ---------- Build 7-day cache from last_8_days_wh ---------- */
   const arr = snap.val().last_8_days_wh || [];
-
-  // Need 8 values → produce 7 deltas
   const result = [];
+
+  // Logic: Current Day Usage = (Current Day Total - Previous Day Total)
+  // We start at i = 1 because we need the 'i-1' baseline
   for (let i = 1; i < arr.length; i++) {
-    result.push({
-      day: arr[i].date,
-      Wh: arr[i].wh,
-    });
+    if (arr[i] && arr[i].date && arr[i-1]) {
+      const dailyUsageWh = arr[i].wh - arr[i-1].wh;
+      
+      result.push({
+        day: arr[i].date, // The date the energy was used
+        wh: Math.max(0, dailyUsageWh), // Ensure we don't get negative numbers
+      });
+    }
   }
-
+  
   LAST_7_DAYS_CACHE[meterId] = result;
+  console.log(`Cache built for ${meterId}:`, result);
 }
-
 /* =========================================================
    3️⃣ FETCH LATEST VALUES – EVERY MINUTE
    ========================================================= */
@@ -118,6 +124,8 @@ function getYesterdayPeakKVA(meterId) {
 }
 
 function getLast7DaysCache(meterId) {
+    console.log("Getting last 7 days cache for meter:", meterId);
+    console.log("Cache content:", LAST_7_DAYS_CACHE[meterId]);
   return LAST_7_DAYS_CACHE[meterId] || [];
 }
 

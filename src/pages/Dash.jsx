@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import BuildingDashboard from "../components/Buildingui.jsx";
 import EnergyConsumptionChart from "../components/Energychart.jsx";
-import { buildWeeklyEnergyData } from "../components/Buildweeklydata.js";
-import { dailyRefresh } from "../components/Firebasetwo.js";
+import { buildWeeklyEnergyData } from "../components/Buildweeklydatathree.js";
+import { dailyRefresh } from "../components/Firebasethree.js";
 import db from "../store/fire";
 
 function msUntilNext535IST() {
@@ -28,12 +28,24 @@ export default function Dash() {
     let dailyInterval;
 
     const runDailyRefresh = async () => {
-      await Promise.all([
-        dailyRefresh(db, "meter_001"),
-        dailyRefresh(db, "meter_002"),
-      ]);
-      setWeeklyEnergyData(buildWeeklyEnergyData());
-    };
+  try {
+    // Wait for Firebase to populate the internal caches in Firebasethree.js
+    await Promise.all([
+      dailyRefresh(db, "meter_001"),
+      dailyRefresh(db, "meter_002"),
+    ]);
+    
+    // Now that cache is full, build the array for the chart
+    const chartData = buildWeeklyEnergyData();
+    
+    // Log this to your browser console (F12) to see if data exists
+    console.log("Chart Data Prepared:", chartData);
+    
+    setWeeklyEnergyData(chartData);
+  } catch (error) {
+    console.error("Refresh failed:", error);
+  }
+};
 
     runDailyRefresh();
 
