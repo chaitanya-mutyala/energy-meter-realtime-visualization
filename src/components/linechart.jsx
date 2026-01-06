@@ -48,7 +48,7 @@ export function PowerUsageChart({ hourlyData }) {
         <div className="bg-slate-900/70 border border-slate-800 rounded-xl tv:rounded-3xl p-6 tv:p-12 shadow-2xl flex flex-col min-h-[400px] tv:min-h-[850px]">
             <h3 className="flex items-center gap-2 tv:gap-4 text-md tv:text-3xl uppercase tracking-wider text-slate-200 mb-8 tv:mb-16">
                 <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-amber-400" />
-                <span>24-Hour Energy Consumption (kWh)</span>
+                <span>Yesterday 24-Hour Energy Consumption (kWh)</span>
             </h3>
             
             {/* Parent container MUST have a explicit height for ResponsiveContainer to work */}
