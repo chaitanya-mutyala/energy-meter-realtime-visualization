@@ -5,6 +5,9 @@ import EnergyConsumptionChart from "../components/Energychart.jsx";
 import { buildWeeklyEnergyData } from "../components/Buildweeklydatathree.js";
 import { dailyRefresh } from "../components/Firebasethree.js";
 import db from "../store/fire";
+import { buildHourlyEnergyData } from "../components/Buildhourly.js";
+import {PowerUsageChart} from "../components/linechart.jsx";
+import Forecast from "../components/Forecast.jsx";
 
 function msUntilNext535IST() {
   const now = new Date();
@@ -22,6 +25,7 @@ function msUntilNext535IST() {
 
 export default function Dash() {
   const [weeklyEnergyData, setWeeklyEnergyData] = useState([]);
+  const [hourlyData, setHourlyData] = useState([]);
 
   useEffect(() => {
     let dailyTimeout;
@@ -37,11 +41,12 @@ export default function Dash() {
     
     // Now that cache is full, build the array for the chart
     const chartData = buildWeeklyEnergyData();
+    const hourlyData = buildHourlyEnergyData();
     
     // Log this to your browser console (F12) to see if data exists
-    console.log("Chart Data Prepared:", chartData);
-    
+
     setWeeklyEnergyData(chartData);
+    setHourlyData(hourlyData);
   } catch (error) {
     console.error("Refresh failed:", error);
   }
@@ -61,7 +66,7 @@ export default function Dash() {
   }, []);
 
   return (
-  <div className="bg-black overflow-hidden">
+  <div className="bg-black h-235 overflow-hidden">
 
     {/* SCALE WRAPPER */}
     <div
@@ -97,6 +102,17 @@ export default function Dash() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 tv:gap-12">
           <div className="w-full min-h-[400px] tv:min-h-[500px] border-2 border-cyan-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
             <EnergyConsumptionChart data={weeklyEnergyData} />
+          </div>
+          <div className="w-full min-h-[400px] tv:min-h-[500px] border-2 border-cyan-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+            <Forecast />
+          </div>
+
+          
+        </div>
+
+        <div >
+          <div className="w-full tv:min-h-[500px] border-2 border-cyan-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+<PowerUsageChart hourlyData={hourlyData} />
           </div>
           
         </div>

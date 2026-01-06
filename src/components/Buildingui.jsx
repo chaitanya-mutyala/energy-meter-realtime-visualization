@@ -67,7 +67,7 @@ export default function BuildingDashboard({ meterId }) {
 
   <div className="w-full flex items-center mt-1 tv:mt-3 px-2">
     {/* Text: Reduced from text-5xl to text-3xl on TV */}
-    <h2 className="text-lg tv:text-3xl font-semibold tracking-wide text-white text-center flex-1">
+    <h2 className="text-3xl tv:text-3xl font-semibold tracking-wide text-white text-center flex-1">
       {meterId === "meter_001"
         ? "SRK Academic Complex"
         : "APJ Laboratory Complex"}
@@ -130,7 +130,7 @@ function Metric({ title, icolor, value, unit, icon: Icon, sparkcolor = "green" }
 
   return (
     <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-4 tv:p-12 shadow-lg flex flex-col justify-between border border-white/5">
-      <div className="flex items-center gap-2 tv:gap-4 text-slate-300 text-xl tv:text-3xl">
+      <div className="flex items-center gap-2 tv:gap-4 text-slate-300 text-2xl tv:text-3xl">
         <Icon className={`w-5 h-5 tv:w-10 tv:h-10 ${icolor}`} />
         {title}
       </div>
@@ -148,18 +148,30 @@ function Metric({ title, icolor, value, unit, icon: Icon, sparkcolor = "green" }
 }
 
 function SysCard({ title, value, unit = "" }) {
-  const safe = typeof value === "number" && !Number.isNaN(value) ? value.toFixed(2) : "--";
+  let displayValue = "--";
 
-  return (
-    <div className="bg-slate-900/70 rounded-lg tv:rounded-2xl px-4 py-3 tv:px-10 tv:py-8 text-center shadow-md border border-white/5">
-      <div className="text-xs tv:text-2xl text-slate-300 uppercase tracking-widest mb-1 tv:mb-4">
-        {title}
-      </div>
-      <div className="text-lg tv:text-4xl font-semibold mt-1">
-        {Math.abs(safe) } <span className="text-sm tv:text-2xl font-normal text-slate-300">{unit}</span>
-      </div>
-    </div>
-  );
+  if (typeof value === "number") {
+    // 1. Get the absolute value to handle -0.999 the same as 0.999
+    const absValue = Math.abs(value);
+
+    // 2. Floor to 2 decimal places logic:
+    // Multiply by 100 (99.9), floor it (99), then divide by 100 (0.99)
+    const floored = Math.floor(absValue * 100) / 100;
+
+    // 3. Format to string to ensure two decimals (e.g., 0.9 becomes "0.90")
+    displayValue = floored.toFixed(2);
+  }
+
+  return (
+    <div className="bg-slate-900/70 rounded-lg tv:rounded-2xl px-4 py-3 tv:px-10 tv:py-8 text-center shadow-md border border-white/5">
+      <div className="text-md tv:text-2xl text-slate-300 uppercase tracking-widest mb-1 tv:mb-4">
+        {title}
+      </div>
+      <div className="text-lg tv:text-4xl font-semibold mt-1">
+        {displayValue} <span className="text-sm tv:text-2xl font-normal text-slate-300">{unit}</span>
+      </div>
+    </div>
+  );
 }
 function PeakSpeedometer({ yesterdayPeak, monthlyPeak, unit }) {
   const monthly = monthlyPeak || 1;
@@ -172,8 +184,8 @@ function PeakSpeedometer({ yesterdayPeak, monthlyPeak, unit }) {
   const strokeDash = (fillPercentage * 212) / 100;
 
   return (
-    <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-1 tv:p-10 h-full flex flex-col items-center justify-center border border-white/10 shadow-inner">
-      <div className="flex items-center gap-3 text-slate-300 text-lg tv:text-3xl mb-8">
+    <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-2 tv:p-10 h-full flex flex-col items-center justify-center border border-white/10 shadow-inner">
+      <div className="flex items-center gap-3 text-slate-300 text-2xl tv:text-3xl mb-8">
         <ChartBarIcon className="w-6 h-6 tv:w-10 tv:h-10 text-cyan-400" />
         Peak Load Performance
       </div>
@@ -220,14 +232,14 @@ function PeakSpeedometer({ yesterdayPeak, monthlyPeak, unit }) {
       </div>
 
       {/* Footer labels tightened */}
-      <div className="w-full mt-2 space-y-2 tv:space-y-4 border-t border-white/5 pt-6">
+      <div className="w-full space-y-2 tv:space-y-4 border-t border-white/5 pt-6">
         <div className="flex justify-between items-center px-2">
-          <span className="text-md tv:text-xl text-slate-200">Yesterday Max Load</span>
-          <span className="text-md tv:text-2xl font-semibold">{yesterdayPeak?.toFixed(1)} {unit}</span>
+          <span className="text-md tv:text-xl text-slate-200 tracking-widest">Yesterday Max Load</span>
+          <span className="text-xl tv:text-2xl font-semibold">{yesterdayPeak?.toFixed(1)} {unit}</span>
         </div>
         <div className="flex justify-between items-center px-2">
-          <span className="text-md tv:text-xl text-slate-200">This Month Max Load</span>
-          <span className="text-md tv:text-2xl font-mono text-emerald-400">{monthlyPeak?.toFixed(1)} {unit}</span>
+          <span className="text-md tv:text-xl text-slate-200 tracking-widest">This Month Max Load</span>
+          <span className="text-xl tv:text-2xl font-semibold text-emerald-400">{monthlyPeak?.toFixed(1)} {unit}</span>
         </div>
       </div>
     </div>
