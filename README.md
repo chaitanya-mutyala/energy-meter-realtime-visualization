@@ -22,9 +22,7 @@ Machine learning forecasting modules are currently under development.
 The project delivers a **smart campus energy monitoring system** integrating:
 
 - Real-time data acquisition from **industrial Modbus smart meters**
-- RS485-based energy data collection using **Arduino (Modbus Master)**
-- **ESP8266 cloud gateway** for wireless uplink
-- **ThingSpeak / Custom API** as temporary cloud backend
+- RS485-based energy data collection using an **ESP32** (Unified Modbus Master & Gateway).
 - **React dashboard** for live visualization
 - **Appwrite authentication** for secure user login
 - **Machine learning forecasting** models (LR, RF, LSTM) under development
@@ -46,29 +44,22 @@ Measures:
 - Apparent power (KWA)
 - Frequency (f)
 
-### 2️⃣ RS485 → TTL Conversion (MAX485 Module)
+### 2️⃣ RS485 → TTL Conversion (MAX3485EBN-XBLW-Transceiver)
 - Handles differential A/B signals  
 - Ensures noise immunity  
 - Validated with **99.8% PDR (Packet Delivery Ratio)**  
 
-### 3️⃣ Arduino – Modbus RTU Master
-- Reads meter registers  
-- Controls DE/RE lines  
-- Ensures data integrity  
-- Validates payload before sending to ESP8266  
+### 3️⃣ ESP32 – Unified Modbus Master & Cloud Gateway
+- Modbus RTU Master: Reads meter registers via Hardware UART using the RS485 transceiver.
+- Data Integrity: Implements CRC-16 validation to ensure error-free data acquisition.
+- WiFi Gateway: Handles secure wireless connection and pushes JSON payloads to Firebase Realtime Database.
+- Latency: Maintains <2 second end-to-end latency from meter to dashboard.
 
-### 4️⃣ ESP32– WiFi Cloud Gateway
-- Receives validated Modbus output via UART  
-- Handles WiFi connection  
-- Pushes data to ThingSpeak/custom API  
-- Maintains <2 second end-to-end latency  
+### 4️⃣ Cloud Backend
+- Firebase
+- Provides API for dashboard fetch requests and cloud Sechdule functions
 
-### 5️⃣ Cloud Backend
-- Temporary: **ThingSpeak**  
-- Future: **Custom Node.js / Python backend**  
-- Provides API for dashboard fetch requests  
-
-### 6️⃣ Frontend Dashboard
+### 5️⃣ Frontend Dashboard
 - Pulls live data  
 - Visualizes values via charts, KPIs, tables  
 
@@ -92,7 +83,7 @@ The platform supports secure login and user management using **Appwrite**.
 The dashboard is built using **React + Vite**, providing:
 
 ### ✨ Dashboard Features
-- 📊 **Live charts** for Voltage, Current, Power  
+- 📊 **Live charts** for Uasge power Consumption 
 - 🔥 **Real-time updates** (auto refresh)  
 - 🧮 **KPI metric cards**    
 - 🔐 **Appwrite secure login UI**  
@@ -103,7 +94,6 @@ The dashboard is built using **React + Vite**, providing:
 - Tailwind CSS
 - Recharts (charts & graphs)
 - Appwrite Auth SDK
-- Axios (API client)
 - Vercel (deployment)
 
 ---

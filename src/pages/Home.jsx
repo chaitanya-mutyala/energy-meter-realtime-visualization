@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"; // Added useState
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "../components/container/Container.jsx";
 
@@ -6,18 +6,16 @@ import HeroBanner from "../assets/Banner4.webp";
 import MeterDashboard from "../assets/3.jpg";
 import MobileMonitoring from "../assets/1.jpg";
 
-import { Zap, Activity, BarChart, ShieldCheck } from "lucide-react";
+import { Zap, Activity, BarChart, ShieldCheck, Cpu, Clock, Radio } from "lucide-react";
 
 function Home() {
   const navigate = useNavigate();
   const timeoutRef = useRef(null);
   
-  // ================= TIMER STATE =================
   const REDIRECT_TIME_MS = 60000; 
   const [timeLeft, setTimeLeft] = useState(REDIRECT_TIME_MS / 1000);
 
   useEffect(() => {
-    // 1. Logic for the actual navigation redirect
     const startTimer = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
@@ -25,14 +23,13 @@ function Home() {
       }, REDIRECT_TIME_MS);
     };
 
-    // 2. Logic for the visible countdown clock
     const countdownInterval = setInterval(() => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     const resetTimer = () => {
       startTimer();
-      setTimeLeft(REDIRECT_TIME_MS / 1000); // Reset visual clock
+      setTimeLeft(REDIRECT_TIME_MS / 1000); 
     };
 
     startTimer();
@@ -62,10 +59,17 @@ function Home() {
       description: "Identification of abnormal load patterns and leakage to ensure high electrical efficiency."
     },
     {
-      icon: <BarChart className="w-7 h-7 tv:w-14 tv:h-14 text-emerald-400" />,
-      title: "ML Forecasting",
-      description: "Predictive analytics for next-day demand planning based on historical consumption data."
+      icon: <Clock className="w-7 h-7 tv:w-14 tv:h-14 text-emerald-400" />,
+      title: "Minute-to-Minute Logs",
+      description: "System precisely transmits data payloads every 60 seconds for granular energy auditing."
     },
+  ];
+
+  // ================= NEW STATISTICS BLOCK DATA =================
+  const stats = [
+    { label: "Devices Installed", value: "02", icon: <Cpu className="text-emerald-500"/> },
+    { label: "Network Latency", value: "< 2s", icon: <Radio className="text-emerald-500"/> },
+    { label: "Sync Interval", value: "1 Min", icon: <Clock className="text-emerald-500"/> },
   ];
 
   return (
@@ -107,12 +111,28 @@ function Home() {
 
       <Container className="tv:px-20">
         
+        {/* ================= NEW: SYSTEM VITALS STATISTICS BLOCK ================= */}
+        <div className="mt-12 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {stats.map((s, i) => (
+            <div key={i} className="flex items-center justify-between p-6 bg-slate-900/80 border-l-4 border-emerald-500 rounded-r-xl">
+              <div>
+                <p className="text-slate-400 text-xs tv:text-xl uppercase tracking-widest">{s.label}</p>
+                <p className="text-3xl tv:text-6xl font-bold text-white">{s.value}</p>
+              </div>
+              <div className="p-3 bg-black rounded-lg">
+                {React.cloneElement(s.icon, { size: 32 })}
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* ================= DATA FLOW STRIP ================= */}
         <div className="my-16 tv:my-32 flex justify-center">
-          <div className="px-8 py-5 tv:px-16 tv:py-10 rounded-2xl bg-slate-900/50 border border-slate-800 text-emerald-400 font-mono tv:text-3xl tracking-[0.3em]">
+          <div className="px-8 py-5 tv:px-16 tv:py-10 rounded-2xl bg-slate-900/50 border border-slate-800 text-emerald-400 font-mono tv:text-3xl tracking-[0.3em] text-center">
             METER → ESP32 → CLOUD → DASHBOARD
           </div>
         </div>
+
         {/* ================= FEATURE CARDS ================= */}
         <section className="py-16 tv:py-32">
           <div className="grid md:grid-cols-3 gap-8 tv:gap-16">
@@ -155,7 +175,7 @@ function Home() {
               <ul className="space-y-4 tv:space-y-8 text-slate-300 tv:text-2xl italic">
                 <li>• Industry standard RS-485 Communication</li>
                 <li>• Low-latency WebSocket updates</li>
-                <li>• Responsive UI architecture</li>
+                <li>• Data transmission optimized for 1-minute intervals</li>
               </ul>
             </div>
             <div className="w-full lg:w-1/2">
@@ -163,9 +183,6 @@ function Home() {
             </div>
           </div>
         </section>
-
-        
-
       </Container>
     </div>
   );
