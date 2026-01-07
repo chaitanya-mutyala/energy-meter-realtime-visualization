@@ -66,7 +66,7 @@ export default function Dash() {
   }, []);
 
   return (
-  <div className="bg-black h-235 overflow-hidden">
+  <div className="bg-black h-auto md:h-235 overflow-hidden">
 
     {/* SCALE WRAPPER */}
     <div

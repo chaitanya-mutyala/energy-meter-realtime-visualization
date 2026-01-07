@@ -62,7 +62,7 @@ async function fetchTodayMeta(db, meterId) {
   LAST_7_DAYS_CACHE[meterId] = dailyResult;
 
   /* ---------- HOURLY USAGE (kWh) ---------- */
-  const hourlyWh = meta.hourly_wh_readings || {};
+  const hourlyWh = meta.hourly_wh || {};
   HOURLY_WH_CACHE[meterId] = hourlyWh;
 
   const times = Object.keys(hourlyWh).sort(); 
