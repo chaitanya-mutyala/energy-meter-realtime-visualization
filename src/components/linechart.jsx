@@ -6,6 +6,7 @@ import {
     ResponsiveContainer,
     AreaChart,
     Area,
+    Legend,          // ✅ ADD
 } from "recharts";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
@@ -14,11 +15,14 @@ const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-slate-950 border border-slate-800 rounded-lg tv:rounded-3xl px-4 py-3 tv:px-10 tv:py-8 shadow-2xl z-50">
-                {/* White color time text */}
                 <p className="text-white font-bold text-lg tv:text-4xl mb-2 tv:mb-4">{label}</p>
                 <div className="space-y-1 tv:space-y-4">
                     {payload.map((entry, index) => (
-                        <p key={index} className="text-xs tv:text-3xl font-bold" style={{ color: entry.color }}>
+                        <p
+                            key={index}
+                            className="text-xs tv:text-3xl font-bold"
+                            style={{ color: entry.color }}
+                        >
                             {entry.name}: {Number(entry.value).toFixed(1)} kWh
                         </p>
                     ))}
@@ -39,7 +43,6 @@ export function PowerUsageChart({ hourlyData }) {
         return () => window.removeEventListener("resize", checkSize);
     }, []);
 
-    // Prevent crash if data is missing
     if (!hourlyData || hourlyData.length === 0) {
         return <div className="text-white p-10">Loading Chart Data...</div>;
     }
@@ -50,65 +53,77 @@ export function PowerUsageChart({ hourlyData }) {
                 <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-amber-400" />
                 <span>Yesterday 24-Hour Energy Consumption (kWh)</span>
             </h3>
-            
-            {/* Parent container MUST have a explicit height for ResponsiveContainer to work */}
+
             <div className="w-full h-[350px] tv:h-[700px]">
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart 
-                        data={hourlyData} 
-                        margin={{ top: 5, right: 30, left: isTV ? 60 : 20, bottom: isTV ? 60 : 20 }}
+                    <AreaChart
+                        data={hourlyData}
+                        margin={{ top: 20, right: 30, left: isTV ? 60 : 20, bottom: isTV ? 60 : 20 }}
                     >
                         <defs>
-                            <linearGradient id="colorM1" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.6}/>
-                                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
-                            </linearGradient>
-                            <linearGradient id="colorM2" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.6}/>
-                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                            </linearGradient>
+                            {/* ✨ Glow effect */}
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
                         </defs>
-                        
+
                         <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                        
-                        <XAxis 
-                            dataKey="hour" 
-                            stroke="#e1e7f0ff" 
-                            fontSize={isTV ? 28 : 18} 
+
+                        <XAxis
+                            dataKey="hour"
+                            stroke="#e1e7f0ff"
+                            fontSize={isTV ? 28 : 18}
                             tickLine={false}
                             axisLine={false}
                             dy={isTV ? 30 : 10}
                         />
-                        
-                        <YAxis 
-                            stroke="#e1e7f0ff" 
-                            fontSize={isTV ? 28 : 18} 
+
+                        <YAxis
+                            stroke="#e1e7f0ff"
+                            fontSize={isTV ? 28 : 18}
                             tickLine={false}
                             axisLine={false}
                             dx={isTV ? -20 : -5}
                         />
-                        
-                        <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#475569', strokeWidth: 2 }} />
-                        
+
+                        <Tooltip
+                            content={<CustomTooltip />}
+                            cursor={{ stroke: "#475569", strokeWidth: 2 }}
+                        />
+
+                        {/* ✅ LEGEND ADDED */}
+                        <Legend
+                            verticalAlign="top"
+                            align="right"
+                            wrapperStyle={{
+                                fontSize: isTV ? "24px" : "12px",
+                                paddingBottom: isTV ? "40px" : "20px",
+                            }}
+                            formatter={(value) => (
+                                <span className="text-slate-200 ml-2">{value}</span>
+                            )}
+                        />
+
                         <Area
                             type="monotone"
-                            dataKey="building1" // Ensure this matches your data keys
-                            name="SRK Academic"
+                            dataKey="building1"
+                            name="SRK Academic Complex"
                             stroke="#f59e0b"
                             strokeWidth={isTV ? 8 : 4}
-                            fillOpacity={1}
-                            fill="url(#colorM1)"
+                            fill="none"
+                            filter="url(#glow)"
                             animationDuration={1500}
                         />
-                        
+
                         <Area
                             type="monotone"
-                            dataKey="building2" // Ensure this matches your data keys
-                            name="APJ Laboratory"
+                            dataKey="building2"
+                            name="APJ Laboratory Complex"
                             stroke="#3b82f6"
                             strokeWidth={isTV ? 8 : 4}
-                            fillOpacity={1}
-                            fill="url(#colorM2)"
+                            fill="none"
+                            filter="url(#glow)"
                             animationDuration={1500}
                         />
                     </AreaChart>

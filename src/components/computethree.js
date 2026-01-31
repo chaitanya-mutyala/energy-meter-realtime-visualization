@@ -8,6 +8,7 @@ import {
   getPrevMonthLastWh,
   getYesterdayPeakKVA,
   getMonthlyPeakKVA,
+  getMonthlyPeakAt,
 } from "./Firebasethree.js";
 
 /*
@@ -44,6 +45,7 @@ export async function generateBuildingMetrics(db, meterId) {
 
   const yesterdayPeakKVA = getYesterdayPeakKVA(meterId);
   const monthlyPeakKVA = getMonthlyPeakKVA(meterId);
+  const monthlyPeakAt = getMonthlyPeakAt(meterId);
 
   /* =====================================================
      4️⃣ ENERGY CALCULATIONS
@@ -74,6 +76,7 @@ export async function generateBuildingMetrics(db, meterId) {
 
     yesterdayPeakKVA: yesterdayPeakKVA ?? 0,        // 🔥 NEW
     monthlyPeakKVA: monthlyPeakKVA ?? 0,            // 🔥 NEW
+    monthlyPeakAt: monthlyPeakAt || null,           // 🕒 NEW
 
     frequency: latest.freq ?? 0,                    // Hz
     pf: latest.PF_AVG ?? 0,                         // PF

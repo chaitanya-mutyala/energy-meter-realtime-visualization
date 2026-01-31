@@ -7,6 +7,8 @@ const META_CACHE = {};
 const LAST_7_DAYS_CACHE = {};  
 const HOURLY_WH_CACHE = {};    
 const HOURLY_KWH_CACHE = {};   
+const FORECAST_CACHE = {};      
+
 
 /* =========================================================
    1️⃣ INIT TODAY (Find the latest date folder)
@@ -24,6 +26,37 @@ async function initTodayFromFirebase(db, meterId) {
   TODAY_DATE[meterId] = Object.keys(snap.val())[0];
   return TODAY_DATE[meterId];
 }
+
+/* =========================================================
+   2️⃣b FETCH TODAY FORECAST
+   ========================================================= */
+async function fetchTodayForecast(db, meterId) {
+  const today = TODAY_DATE[meterId];
+  if (!today) return null;
+
+  const forecastRef = ref(
+    db,
+    `loadforecast/meters/${meterId}/${today}`
+  );
+
+  const snap = await get(forecastRef);
+  if (!snap.exists()) {
+    FORECAST_CACHE[meterId] = null;
+    return null;
+  }
+
+  const forecast = snap.val();
+
+  FORECAST_CACHE[meterId] = {
+    generated_at: forecast.generated_at,
+    resolution: forecast.resolution,     // e.g. "15min"
+    unit: forecast.unit,                 // "W"
+    points: forecast.prediction_96_points || [],
+  };
+
+  return FORECAST_CACHE[meterId];
+}
+
 
 /* =========================================================
    2️⃣ FETCH TODAY META (Hourly & 7-Day Logic)
@@ -140,8 +173,13 @@ async function fetchLatestValues(db, meterId) {
    ========================================================= */
 async function dailyRefresh(db, meterId) {
   await initTodayFromFirebase(db, meterId);
-  return await fetchTodayMeta(db, meterId);
+
+  await fetchTodayMeta(db, meterId);
+  await fetchTodayForecast(db, meterId); // 🔮 NEW
+
+  return true;
 }
+
 
 async function minuteRefresh(db, meterId) {
   return await fetchLatestValues(db, meterId);
@@ -156,9 +194,20 @@ export const getPrevMonthLastWh = (id) => META_CACHE[id]?.last_month_wh ?? null;
 export const getMonthlyPeakKVA = (id) => META_CACHE[id]?.monthly_peak_kVA ?? null;
 export const getYesterdayPeakKVA = (id) => META_CACHE[id]?.yesterday_peak_kVA ?? null;
 export const getLast7DaysCache = (id) => LAST_7_DAYS_CACHE[id] || [];
+export const getMonthlyPeakAt = (id) => META_CACHE[id]?.monthly_peak_at || null;
 export const getHourlyWh = (id) => HOURLY_WH_CACHE[id] || {};
 export const getHourlyUsage = (id) => HOURLY_KWH_CACHE[id] || [];
+export const getForecast = (id) =>
+  FORECAST_CACHE[id] || null;
 
+export const getForecastPoints = (id) =>
+  FORECAST_CACHE[id]?.points || [];
+
+export const getForecastResolution = (id) =>
+  FORECAST_CACHE[id]?.resolution || null;
+
+export const getForecastUnit = (id) =>
+  FORECAST_CACHE[id]?.unit || "W";
 export {
   dailyRefresh,
   minuteRefresh,

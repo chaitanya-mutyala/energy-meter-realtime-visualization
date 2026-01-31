@@ -8,6 +8,8 @@ import db from "../store/fire";
 import { buildHourlyEnergyData } from "../components/Buildhourly.js";
 import {PowerUsageChart} from "../components/linechart.jsx";
 import Forecast from "../components/Forecast.jsx";
+import {buildForecastEnergyData} from "../components/buildForecastEnergyData.js";
+
 
 function msUntilNext535IST() {
   const now = new Date();
@@ -26,6 +28,7 @@ function msUntilNext535IST() {
 export default function Dash() {
   const [weeklyEnergyData, setWeeklyEnergyData] = useState([]);
   const [hourlyData, setHourlyData] = useState([]);
+  const [forecastPoints, setForecastPoints] = useState([]);
 
   useEffect(() => {
     let dailyTimeout;
@@ -42,11 +45,14 @@ export default function Dash() {
     // Now that cache is full, build the array for the chart
     const chartData = buildWeeklyEnergyData();
     const hourlyData = buildHourlyEnergyData();
+    const forecastData = buildForecastEnergyData();
+
     
     // Log this to your browser console (F12) to see if data exists
 
     setWeeklyEnergyData(chartData);
     setHourlyData(hourlyData);
+    setForecastPoints(forecastData);
   } catch (error) {
     console.error("Refresh failed:", error);
   }
@@ -104,7 +110,7 @@ export default function Dash() {
             <EnergyConsumptionChart data={weeklyEnergyData} />
           </div>
           <div className="w-full min-h-[400px] tv:min-h-[500px] border-2 border-cyan-500/40 rounded-3xl p-1 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
-            <Forecast />
+            <Forecast forecast={forecastPoints} />
           </div>
 
           

@@ -7,7 +7,7 @@ export function buildHourlyEnergyData() {
   // 1. Pre-fill the map with all 24 hours initialized to 0.
   // This prevents "holes" in your chart if data is missing for an hour.
   const map = {};
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 25; i++) {
     const hourLabel = `${i.toString().padStart(2, '0')}:00`;
     map[hourLabel] = {
       hour: hourLabel,
