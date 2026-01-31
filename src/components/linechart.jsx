@@ -94,16 +94,15 @@ export function PowerUsageChart({ hourlyData }) {
 
                         {/* ✅ LEGEND ADDED */}
                         <Legend
-                            verticalAlign="top"
-                            align="right"
-                            wrapperStyle={{
-                                fontSize: isTV ? "24px" : "12px",
-                                paddingBottom: isTV ? "40px" : "20px",
-                            }}
-                            formatter={(value) => (
-                                <span className="text-slate-200 ml-2">{value}</span>
-                            )}
-                        />
+              verticalAlign="top"
+              align="right"
+              iconSize={isTV ? 26 : 20}
+              formatter={(value) => (
+                <span style={{ color: "#ffffff", fontWeight: 400 }}>
+                  {value}
+                </span>
+              )}
+            />
 
                         <Area
                             type="monotone"
@@ -119,7 +118,7 @@ export function PowerUsageChart({ hourlyData }) {
                         <Area
                             type="monotone"
                             dataKey="building2"
-                            name="APJ Laboratory Complex"
+                            name="APJ Lab"
                             stroke="#3b82f6"
                             strokeWidth={isTV ? 8 : 4}
                             fill="none"

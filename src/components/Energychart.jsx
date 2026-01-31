@@ -114,16 +114,14 @@ export default function EnergyConsumptionChart({ data }) {
                         />
 
                         <Legend
-                            verticalAlign="top"
-                            align="right"
-                            wrapperStyle={{
-                                fontSize: isTV ? "24px" : "12px",
-                                paddingBottom: isTV ? "40px" : "20px"
-                            }}
-                            formatter={(value) => (
-                                <span className="text-slate-200 ml-2">{value}</span>
-                            )}
-                        />
+              verticalAlign="top"
+              align="right"
+              formatter={(value) => (
+                <span style={{ color: "#ffffff", fontWeight: 400 }}>
+                  {value}
+                </span>
+              )}
+            />
                         
 
                         <Bar
@@ -138,7 +136,7 @@ export default function EnergyConsumptionChart({ data }) {
 
                         <Bar
                             dataKey="building2"
-                            name="APJ Laboratory Complex"
+                            name="APJ Lab"
                             fill="url(#colorB2)"
                             filter="url(#barGlow)"
                             radius={isTV ? [8, 8, 0, 0] : [4, 4, 0, 0]}
