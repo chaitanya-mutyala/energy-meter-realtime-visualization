@@ -176,49 +176,75 @@ function SysCard({ title, value, unit = "" }) {
 }
 function PeakSpeedometer({ yesterdayPeak, monthlyPeak, monthlyPeakAt, unit }) {
   const monthly = monthlyPeak || 1;
-  const fillPercentage = Math.min(((0.9 * yesterdayPeak) / monthly) * 100, 100);
+  const fillPercentage = Math.min((yesterdayPeak / monthly) * 100, 100);
 
   return (
-    <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-4 tv:p-10 h-full flex flex-col items-center justify-center border border-white/10 shadow-inner">
-      <div className="flex items-center gap-3 text-slate-300 text-xl tv:text-3xl mb-6">
-        <ChartBarIcon className="w-6 h-6 tv:w-10 tv:h-10 text-cyan-400" />
+    <div className="bg-slate-900/80 rounded-xl tv:rounded-3xl p-3 tv:p-12 h-full flex flex-col items-center justify-between border border-white/5 shadow-lg">
+      
+      {/* Header - Matches Metric Style */}
+      <div className="flex items-center gap-3 tv:gap-4 text-slate-300 text-2xl tv:text-3xl mb-4 w-full justify-center lg:justify-start">
+        <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-cyan-400" />
         Peak Load Performance
       </div>
 
-      <div className="relative flex items-center justify-center mb-6">
-        <svg className="w-44 h-44 tv:w-80 tv:h-80 transform -rotate-225" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" strokeWidth="8" strokeDasharray="212 282" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="45" fill="none" stroke="url(#ringGradient)" strokeWidth="10" strokeDasharray={`${(fillPercentage * 212) / 100} 282`} strokeLinecap="round" className="transition-all duration-1000 ease-out" />
+      {/* Speedometer Gauge */}
+      <div className="relative flex items-center justify-center">
+        <svg className="w-56 h-32 tv:w-[480px] tv:h-[280px]" viewBox="0 0 100 55">
+          {/* Background Track */}
+          <path
+            d="M 10 50 A 40 40 0 0 1 90 50"
+            fill="none"
+            stroke="#1e293b"
+            strokeWidth="7"
+            strokeLinecap="round"
+          />
+          {/* Progress Track */}
+          <path
+            d="M 10 50 A 40 40 0 0 1 90 50"
+            fill="none"
+            stroke="url(#gaugeGradient)"
+            strokeWidth="9"
+            strokeDasharray={`${(fillPercentage * 125.6) / 100} 125.6`}
+            strokeLinecap="round"
+            className="transition-all duration-1000 ease-out"
+          />
           <defs>
-            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#8b5cf6" /><stop offset="50%" stopColor="#ef4444" /><stop offset="100%" stopColor="#f59e0b" />
+            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#22d3ee" />
+              <stop offset="100%" stopColor="#818cf8" />
             </linearGradient>
           </defs>
         </svg>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center pt-2">
-          <span className="text-sm tv:text-lg text-slate-300 uppercase font-semibold">Peak</span>
-          <span className="text-4xl tv:text-8xl font-bold leading-none">{yesterdayPeak?.toFixed(1)}</span>
-          <span className="text-md tv:text-2xl text-slate-300 font-medium">{unit}</span>
-          <span className="mt-1 text-[15px] tv:text-lg text-cyan-400 font-bold uppercase tracking-widest">Yesterday</span>
+        {/* Center Text Container */}
+        <div className="absolute bottom-2 flex flex-col items-center">
+          <span className="text-4xl tv:text-9xl font-bold text-white tracking-tight">
+            {yesterdayPeak?.toFixed(1)}
+          </span>
+          <div className="text-md tv:text-2xl text-slate-200 font-medium uppercase tracking-widest">
+            {unit} <span className="text-cyan-400 mx-1 tv:mx-2">|</span> <span className="text-white">Yesterday</span>
+          </div>
         </div>
       </div>
 
-      <div className="w-full border-t border-white/5 pt-4 space-y-2">
-        <div className="flex justify-between items-center px-4">
-          <span className="text-sm tv:text-xl text-slate-300 font-medium">This Month Max Load</span>
-          <span className="text-lg tv:text-2xl font-bold text-emerald-400">{monthlyPeak?.toFixed(1)} {unit}</span>
-        </div>
-        
-        {/* NEW LINE: Monthly Peak Timestamp */}
-        {monthlyPeakAt && (
-          <div className="flex justify-between items-center px-4">
-            <span className="text-[10px] tv:text-lg text-slate-500 uppercase tracking-wider">Monthly Peak At</span>
-            <span className="text-xs tv:text-lg text-slate-400 font-mono">
-              {monthlyPeakAt.date} | {monthlyPeakAt.time}
-            </span>
+      {/* Monthly Record Card - Matches SysCard aesthetic */}
+      <div className="w-full mt-4 tv:mt-8 bg-slate-800/40 rounded-xl tv:rounded-2xl p-4 tv:p-8 border border-white/5">
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="text-[12px] tv:text-xl text-slate-300 uppercase tracking-[0.15em] mb-1">
+              Monthly Peak Load Record
+            </div>
+            <div className="text-md tv:text-2xl text-slate-300 font-mono">
+              {monthlyPeakAt?.date} <span className="opacity-50 mx-1 tv:mx-2">•</span> {monthlyPeakAt?.time}
+            </div>
           </div>
-        )}
+          <div className="text-right">
+            <div className="text-3xl tv:text-5xl font-bold text-emerald-400 tabular-nums">
+              {monthlyPeak?.toFixed(1)}
+            </div>
+            <div className="text-[12px] tv:text-xl text-slate-300 font-medium uppercase">{unit}</div>
+          </div>
+        </div>
       </div>
     </div>
   );
