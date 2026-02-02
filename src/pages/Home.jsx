@@ -5,7 +5,7 @@ import Container from "../components/container/Container.jsx";
 import HeroBanner from "../assets/Banner4.webp";
 import MeterDashboard from "../assets/3.jpg";
 import MobileMonitoring from "../assets/1.jpg";
-import zeroBanner from "../assets/Banner5.webp";
+import zeroBanner from "../assets/banner5.webp";
 // Added Brain icon for ML representation
 import { Zap, Activity, BarChart, ShieldCheck, Cpu, Clock, Radio, Brain, LineChart } from "lucide-react";
 
