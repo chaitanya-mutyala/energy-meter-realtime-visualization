@@ -27,94 +27,103 @@ function Login() {
     }
 
     return (
-        // Main container uses flex-col to stack items vertically and centers them
-        <div className='flex flex-col items-center justify-center w-full py-8'>
+        /* Main Container: Pure Black */
+        <div className='flex flex-col items-center justify-center w-full min-h-screen py-12 bg-black'>
             
-            {/* === BOX 1: LOGIN FORM (Max width: lg) === */}
-            <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-                <div className="mb-2 flex justify-center">
+            {/* === BOX 1: LOGIN FORM (White Card) === */}
+            <div className='mx-auto w-full max-w-lg bg-white rounded-2xl p-10 shadow-[0_0_20px_rgba(255,255,255,0.1)]'>
+                <div className="mb-4 flex justify-center">
                     <span className="inline-block w-full max-w-[100px]">
                         <Logo width="100%" />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
-                <p className="mt-2 text-center text-base text-black/60">
-                    Don&apos;t have any account?&nbsp;
-                    <Link
-                        to="/signup"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
-                    >
-                        Sign Up
-                    </Link>
-                </p>
-                {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
                 
-                {/* Login Form */}
+                <h2 className="text-center text-3xl font-bold text-black tracking-tight">
+                    Welcome Back
+                </h2>
+                <p className="mt-2 text-center text-base text-gray-600">
+                    Sign in to your account
+                </p>
+
+                {error && (
+                    <p className="text-red-600 mt-6 text-center text-sm font-medium">{error}</p>
+                )}
+                
                 <form onSubmit={handleSubmit(login)} className='mt-8'>
                     <div className='space-y-5'>
                         <Input
-                            label="Email: "
+                            label="Email"
                             placeholder="Enter your email"
                             type="email"
+                            labelClassName="text-black font-semibold"
+                            className="text-black border-gray-300 focus:border-black"
                             {...register("email", {
                                 required: true,
                                 validate: {
                                     matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                    "Please enter a valid email address",
                                 }
                             })}
                         />
                         <Input
-                            label="Password: "
+                            label="Password"
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="••••••••"
+                            labelClassName="text-black font-semibold"
+                            className="text-black border-gray-300 focus:border-black"
                             {...register("password", {
                                 required: true,
                             })}
                         />
                         <Button
                             type="submit"
-                            className="w-full"
-                        >Sign in</Button>
+                            className="w-full py-3 bg-black text-white hover:bg-gray-800 transition-colors"
+                        >
+                            Sign In
+                        </Button>
                     </div>
                 </form>
+
+                <div className="mt-6 text-center">
+                    <p className="text-sm text-gray-500">
+                        Don&apos;t have an account?&nbsp;
+                        <Link
+                            to="/signup"
+                            className="font-bold text-black hover:underline"
+                        >
+                            Sign Up
+                        </Link>
+                    </p>
+                </div>
             </div>
-            {/* ==================================================== */}
 
-
-            {/* === BOX 2: DEMO CREDENTIALS (Centered, Smaller Width: sm, with gap-y) === */}
-            <div className={`mt-8 w-full max-w-sm bg-gray-100 rounded-xl p-6 border border-black/10`}>
-                
-                <h3 className='text-lg font-bold mb-3 text-black/80 flex items-center justify-center'>
-                    ✨ Demo Access
+            {/* === BOX 2: DEMO CREDENTIALS (White Card) === */}
+            <div className='mt-8 w-full max-w-sm bg-white rounded-xl p-6 shadow-lg border border-gray-100'>
+                <h3 className='text-sm font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center justify-center gap-2'>
+                    <span>✨</span> Demo Access <span>✨</span>
                 </h3>
                 
-                {/* Username Row */}
-                <div className='flex justify-between items-center mb-2 p-2 bg-white rounded-lg border border-gray-200'>
-                    <strong className='text-sm text-black/70 w-1/3'>Email:</strong> 
-                    <span 
-                        className='font-mono text-sm text-black/90 w-2/3 truncate text-right font-semibold'
-                    >
-                        eee@student.nitandhra.ac.in
-                    </span>
+                <div className='space-y-3'>
+                    <div className='flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-200'>
+                        <strong className='text-xs text-gray-500 uppercase'>Email:</strong> 
+                        <span className='font-mono text-xs text-black font-semibold truncate ml-2'>
+                            eee@student.nitandhra.ac.in
+                        </span>
+                    </div>
+                    
+                    <div className='flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-200'>
+                        <strong className='text-xs text-gray-500 uppercase'>Pass:</strong> 
+                        <span className='font-mono text-xs text-black font-semibold ml-2'>
+                            123456789
+                        </span>
+                    </div>
                 </div>
-                
-                {/* Password Row */}
-                <div className='flex justify-between items-center p-2 bg-white rounded-lg border border-gray-200'>
-                    <strong className='text-sm text-black/70 w-1/3'>Password:</strong> 
-                    <span 
-                        className='font-mono text-sm text-black/90 w-2/3 truncate text-right font-semibold'
-                    >
-                        123456789
-                    </span>
-                </div>
-                
-                <p className='mt-4 text-xs text-black/50 text-center'>
-                    Use these credentials to try out the application instantly.
-                </p>
             </div>
-            {/* ==================================================== */}
 
+            {/* Navigation outside the white boxes needs to be white/gray */}
+            <Link to="/" className="mt-8 text-sm text-gray-500 hover:text-white transition-colors">
+                ← Back to Home
+            </Link>
         </div>
     )
 }

@@ -147,6 +147,11 @@ export default function Forecast({ forecast }) {
               stroke="#e1e7f0"
               tickLine={false}
               axisLine={false}
+              domain={[10, 'auto']}
+              allowDataOverflow={true}
+  tick={{ fontSize: isTV ? 20 : 14 }}
+  // Optional: adds some padding to the labels
+  width={isTV ? 80 : 50}
             />
 
             <Tooltip content={<CustomTooltip />} />

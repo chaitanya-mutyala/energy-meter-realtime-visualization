@@ -5,10 +5,6 @@ function Footer() {
   return (
     <section className="w-full bg-gradient-to-t from-slate-900 via-slate-950 to-black py-14 border-t border-slate-800">
       <div className="mx-auto max-w-7xl px-4">
-        {/* FIX: Changed -m-6 to flex-row and ensured child widths sum to 100%.
-            Using 'grid' or 'w-1/4' ensures that on a 32" TV, all 4 sections 
-            stay on ONE line instead of wrapping.
-        */}
         <div className="flex flex-wrap -m-6">
 
           {/* 1. Tech Stack */}
@@ -23,7 +19,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* 2. System Status (Added for Project Context) */}
+          {/* 2. System Status */}
           <div className="p-6 w-1/2 md:w-1/4">
             <h3 className="mb-6 text-[10px] font-bold uppercase text-blue-400 tracking-[0.2em]">
               Live Status
@@ -40,26 +36,29 @@ function Footer() {
             </ul>
           </div>
 
-          {/* 3. Navigation */}
+          {/* 3. API & ML - Added for your Render Link */}
           <div className="p-6 w-1/2 md:w-1/4">
             <h3 className="mb-6 text-[10px] font-bold uppercase text-emerald-400 tracking-[0.2em]">
-              Quick Links
+              Endpoints
             </h3>
             <ul className="space-y-3">
+              <li>
+                <a
+                  href="https://loadforecast-api.onrender.com/docs" // Link to your Swagger/FastAPI docs if available
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 text-sm text-slate-300 hover:text-purple-400 transition-colors"
+                >
+                  Try Forecast API
+                  <span className="text-[10px] bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded border border-purple-500/30 group-hover:bg-purple-500/40 transition-all">
+                    LIVE
+                  </span>
+                </a>
+              </li>
               <li>
                 <Link className="text-sm text-slate-300 hover:text-emerald-400 transition-colors" to="/dashboard">
                   Main Dashboard
                 </Link>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-slate-300 hover:text-emerald-400 transition-colors"
-                  href="https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub Source
-                </a>
               </li>
             </ul>
           </div>
@@ -83,7 +82,14 @@ function Footer() {
               © 2026 Energy Monitoring System — NITANP
             </p>
             <div className="flex gap-6">
-               <Link to="/terms" className="text-[11px] text-slate-600 hover:text-slate-400">Privacy Policy</Link>
+               <a 
+                 href="https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 className="text-[11px] text-slate-600 hover:text-slate-400"
+               >
+                 GitHub Source
+               </a>
                <Link to="/documentation" className="text-[11px] text-slate-600 hover:text-slate-400">Documentation</Link>
             </div>
           </div>

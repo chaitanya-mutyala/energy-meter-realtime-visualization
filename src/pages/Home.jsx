@@ -5,8 +5,9 @@ import Container from "../components/container/Container.jsx";
 import HeroBanner from "../assets/Banner4.webp";
 import MeterDashboard from "../assets/3.jpg";
 import MobileMonitoring from "../assets/1.jpg";
-
-import { Zap, Activity, BarChart, ShieldCheck, Cpu, Clock, Radio } from "lucide-react";
+import zeroBanner from "../assets/Banner5.webp";
+// Added Brain icon for ML representation
+import { Zap, Activity, BarChart, ShieldCheck, Cpu, Clock, Radio, Brain, LineChart } from "lucide-react";
 
 function Home() {
   const navigate = useNavigate();
@@ -54,9 +55,9 @@ function Home() {
       description: "Live visualization of power metrics across campus buildings using Modbus RTU protocols."
     },
     {
-      icon: <Activity className="w-7 h-7 tv:w-14 tv:h-14 text-emerald-400" />,
-      title: "Anomaly Detection",
-      description: "Identification of abnormal load patterns and leakage to ensure high electrical efficiency."
+      icon: <Brain className="w-7 h-7 tv:w-14 tv:h-14 text-blue-400" />,
+      title: "Predictive Forecasting",
+      description: "Utilizing Random Forest Regressors to project future load patterns based on historical usage."
     },
     {
       icon: <Clock className="w-7 h-7 tv:w-14 tv:h-14 text-emerald-400" />,
@@ -65,7 +66,6 @@ function Home() {
     },
   ];
 
-  // ================= NEW STATISTICS BLOCK DATA =================
   const stats = [
     { label: "Devices Installed", value: "02", icon: <Cpu className="text-emerald-500"/> },
     { label: "Network Latency", value: "< 2s", icon: <Radio className="text-emerald-500"/> },
@@ -111,7 +111,7 @@ function Home() {
 
       <Container className="tv:px-20">
         
-        {/* ================= NEW: SYSTEM VITALS STATISTICS BLOCK ================= */}
+        {/* ================= SYSTEM VITALS STATISTICS BLOCK ================= */}
         <div className="mt-12 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           {stats.map((s, i) => (
             <div key={i} className="flex items-center justify-between p-6 bg-slate-900/80 border-l-4 border-emerald-500 rounded-r-xl">
@@ -129,7 +129,7 @@ function Home() {
         {/* ================= DATA FLOW STRIP ================= */}
         <div className="my-16 tv:my-32 flex justify-center">
           <div className="px-8 py-5 tv:px-16 tv:py-10 rounded-2xl bg-slate-900/50 border border-slate-800 text-emerald-400 font-mono tv:text-3xl tracking-[0.3em] text-center">
-            METER → ESP32 → CLOUD → DASHBOARD
+            METER → ESP32 → FIREBASE → ML MODEL → DASHBOARD
           </div>
         </div>
 
@@ -146,9 +146,53 @@ function Home() {
           </div>
         </section>
 
+        {/* ================= NEW: ML FORECASTING SECTION ================= */}
+       {/* ================= UPDATED: ML FORECASTING SECTION ================= */}
+<section className="py-12 tv:py-24">
+  <div className="flex flex-col lg:flex-row items-center gap-12 bg-slate-900/40 rounded-3xl border border-slate-800 overflow-hidden">
+    <div className="w-full lg:w-1/2 p-10 tv:p-24">
+      <div className="flex items-center gap-4 mb-6">
+        <div className="p-3 bg-blue-500/10 rounded-xl">
+          <Brain className="text-blue-400 w-8 h-8 tv:w-16 tv:h-16" />
+        </div>
+        <h2 className="text-3xl tv:text-7xl font-bold text-white tracking-tight">
+          Load Forecasting
+        </h2>
+      </div>
+      
+      <p className="text-slate-400 tv:text-3xl mb-8 leading-relaxed">
+        Every day, a specialized <b>Cloud Function</b> triggers our <b>Random Forest Regressor</b> hosted on Render. 
+        The model processes historical trends to generate load predictions, which are then synced back to <b>Firebase</b> for real-time dashboard display.
+      </p>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+          <p className="text-blue-400 font-bold tv:text-2xl uppercase text-[10px] tracking-widest mb-1">Compute</p>
+          <p className="text-white font-medium tv:text-xl">Render Engine</p>
+        </div>
+        <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+          <p className="text-emerald-400 font-bold tv:text-2xl uppercase text-[10px] tracking-widest mb-1">Storage</p>
+          <p className="text-white font-medium tv:text-xl">Firebase RTDB</p>
+        </div>
+      </div>
+    </div>
+    <div className="w-full lg:w-1/2">
+      <img 
+        src={zeroBanner} 
+        alt="Dashboard UI" 
+        className="w-full h-[370px] tv:h-[500px] object-cover object-top" 
+      />
+    </div>
+          </div>
+    
+
+    
+  
+  
+</section>
         {/* ================= VISUAL SECTION 1: DASHBOARD ================= */}
         <section className="py-12 tv:py-24">
-          <div className="flex flex-col lg:flex-row items-center gap-12 bg-slate-900/40 rounded-3xl border border-slate-800 overflow-hidden">
+          <div className="flex flex-col lg:flex-row-reverse items-center gap-12 bg-slate-900/40 rounded-3xl border border-slate-800 overflow-hidden">
             <div className="w-full lg:w-1/2 p-10 tv:p-24">
               <h2 className="text-3xl tv:text-7xl font-bold text-white mb-6">Live Visualization</h2>
               <p className="text-slate-400 tv:text-3xl mb-8 leading-relaxed">
@@ -163,26 +207,42 @@ function Home() {
             </div>
           </div>
         </section>
-
-        {/* ================= VISUAL SECTION 2: MOBILE/SYSTEM ================= */}
         <section className="py-12 tv:py-24">
+
           <div className="flex flex-col lg:flex-row-reverse items-center gap-12 bg-slate-900/40 rounded-3xl border border-slate-800 overflow-hidden">
+
             <div className="w-full lg:w-1/2 p-10 tv:p-24">
+
               <h2 className="text-3xl tv:text-7xl font-bold text-white mb-6">Edge Intelligence</h2>
+
               <p className="text-slate-400 tv:text-3xl mb-8 leading-relaxed">
+
                 The ESP32 acts as a robust <b>Modbus Master</b>, polling data every few seconds and handling local buffering to ensure zero data loss during network spikes.
+
               </p>
+
               <ul className="space-y-4 tv:space-y-8 text-slate-300 tv:text-2xl italic">
+
                 <li>• Industry standard RS-485 Communication</li>
+
                 <li>• Low-latency WebSocket updates</li>
+
                 <li>• Data transmission optimized for 1-minute intervals</li>
+
               </ul>
+
             </div>
+
             <div className="w-full lg:w-1/2">
+
               <img src={MobileMonitoring} alt="Hardware Gateway" className="w-full h-full object-cover" />
+
             </div>
+
           </div>
+
         </section>
+
       </Container>
     </div>
   );

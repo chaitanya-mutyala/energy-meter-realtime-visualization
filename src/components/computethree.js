@@ -70,9 +70,11 @@ export async function generateBuildingMetrics(db, meterId) {
   return {
     activePower: (latest.Watts_Total ?? 0) / 1000,   // kW
     reactivePower: ReactivePower / 1000,            // kVAR
+    Load : (latest.VA_total ?? 0) / 1000,    // kVA
 
     energyToday: todayEnergy / 1000,                // kWh
     energyMonth: monthEnergy / 1000,                // kWh
+    
 
     yesterdayPeakKVA: yesterdayPeakKVA ?? 0,        // 🔥 NEW
     monthlyPeakKVA: monthlyPeakKVA ?? 0,            // 🔥 NEW
