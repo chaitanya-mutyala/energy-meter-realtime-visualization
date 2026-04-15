@@ -1,102 +1,120 @@
 import {
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    AreaChart,
-    Area,
-    Legend,          // ✅ ADD
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  Legend,
 } from "recharts";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 
 const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-        return (
-            <div className="bg-slate-950 border border-slate-800 rounded-lg tv:rounded-3xl px-4 py-3 tv:px-10 tv:py-8 shadow-2xl z-50">
-                <p className="text-white font-bold text-lg tv:text-4xl mb-2 tv:mb-4">{label}</p>
-                <div className="space-y-1 tv:space-y-4">
-                    {payload.map((entry, index) => (
-                        <p
-                            key={index}
-                            className="text-xs tv:text-3xl font-bold"
-                            style={{ color: entry.color }}
-                        >
-                            {entry.name}: {Number(entry.value).toFixed(1)} kWh
-                        </p>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-    return null;
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-950 border border-slate-800 rounded-lg tv:rounded-3xl px-4 py-3 tv:px-10 tv:py-8 shadow-2xl z-50">
+        <p className="text-white font-bold text-lg tv:text-4xl mb-2 tv:mb-4">
+          {label}
+        </p>
+
+        <div className="space-y-1 tv:space-y-4">
+          {payload.map((entry, index) => (
+            <p
+              key={index}
+              className="text-xs tv:text-3xl font-bold"
+              style={{ color: entry.color }}
+            >
+              {entry.name}: {(entry.value / 1000).toFixed(2)} kW
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
 };
 
-export function PowerUsageChart({ hourlyData }) {
-    const [isTV, setIsTV] = useState(false);
+export function PowerUsageChart({ data }) {
+  const [isTV, setIsTV] = useState(false);
 
-    useEffect(() => {
-        const checkSize = () => setIsTV(window.innerWidth >= 1900);
-        checkSize();
-        window.addEventListener("resize", checkSize);
-        return () => window.removeEventListener("resize", checkSize);
-    }, []);
+  useEffect(() => {
+    const checkSize = () => setIsTV(window.innerWidth >= 1900);
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
 
-    if (!hourlyData || hourlyData.length === 0) {
-        return <div className="text-white p-10">Loading Chart Data...</div>;
-    }
+  if (!data || data.length === 0) {
+    return <div className="text-white p-10">Loading Chart Data...</div>;
+  }
 
-    return (
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl tv:rounded-3xl p-6 tv:p-12 shadow-2xl flex flex-col min-h-[400px] tv:min-h-[850px]">
-            <h3 className="flex items-center gap-2 tv:gap-4 text-md tv:text-3xl uppercase tracking-wider text-slate-200 mb-8 tv:mb-16">
-                <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-amber-400" />
-                <span>Yesterday 24-Hour Energy Consumption (kWh)</span>
-            </h3>
+  return (
+    <div className="bg-slate-900/70 border border-slate-800 rounded-xl tv:rounded-3xl p-6 tv:p-12 shadow-2xl flex flex-col min-h-[400px] tv:min-h-[850px]">
+      
+      {/* 🔥 TITLE FIX */}
+      <h3 className="flex items-center gap-2 tv:gap-4 text-md tv:text-3xl uppercase tracking-wider text-slate-200 mb-8 tv:mb-16">
+        <ChartBarIcon className="w-5 h-5 tv:w-10 tv:h-10 text-amber-400" />
+        <span>Yesterday Load Curve (kW)</span>
+      </h3>
 
-            <div className="w-full h-[350px] tv:h-[700px]">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                        data={hourlyData}
-                        margin={{ top: 20, right: 30, left: isTV ? 60 : 20, bottom: isTV ? 60 : 20 }}
-                    >
-                        <defs>
-                            {/* ✨ Glow effect */}
-                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur stdDeviation="3" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
-                        </defs>
+      <div className="w-full h-[350px] tv:h-[700px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={data}
+            margin={{
+              top: 20,
+              right: 30,
+              left: isTV ? 60 : 20,
+              bottom: isTV ? 60 : 20,
+            }}
+          >
+            {/* ✨ GLOW EFFECT */}
+            <defs>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
 
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#1e293b"
+              vertical={false}
+            />
 
-                        <XAxis
-                            dataKey="hour"
-                            stroke="#e1e7f0ff"
-                            fontSize={isTV ? 28 : 18}
-                            tickLine={false}
-                            axisLine={false}
-                            dy={isTV ? 30 : 10}
-                        />
+            {/* 🔥 FIXED → time instead of hour */}
+            <XAxis
+              dataKey="time"
+              stroke="#e1e7f0"
+              fontSize={isTV ? 28 : 14}
+              tickLine={false}
+              axisLine={false}
+              interval={7}   // prevent clutter (96 points)
+              dy={isTV ? 30 : 10}
+            />
 
-                        <YAxis
-                            stroke="#e1e7f0ff"
-                            fontSize={isTV ? 28 : 18}
-                            tickLine={false}
-                            axisLine={false}
-                            dx={isTV ? -20 : -5}
-                        />
+            {/* 🔥 FIXED → kW */}
+            <YAxis
+              stroke="#e1e7f0"
+              fontSize={isTV ? 28 : 14}
+              tickLine={false}
+              axisLine={false}
+              dx={isTV ? -20 : -5}
+              tickFormatter={(v) => (v / 1000).toFixed(1)}
+            />
 
-                        <Tooltip
-                            content={<CustomTooltip />}
-                            cursor={{ stroke: "#475569", strokeWidth: 2 }}
-                        />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ stroke: "#475569", strokeWidth: 2 }}
+            />
 
-                        {/* ✅ LEGEND ADDED */}
-                        <Legend
+            {/* 🔥 MATCHED LEGEND */}
+            <Legend
               verticalAlign="top"
               align="right"
-              iconSize={isTV ? 26 : 20}
+              iconSize={isTV ? 26 : 16}
               formatter={(value) => (
                 <span style={{ color: "#ffffff", fontWeight: 400 }}>
                   {value}
@@ -104,30 +122,34 @@ export function PowerUsageChart({ hourlyData }) {
               )}
             />
 
-                        <Area
-                            type="monotone"
-                            dataKey="building1"
-                            name="SRK Academic Complex"
-                            stroke="#f59e0b"
-                            strokeWidth={isTV ? 8 : 4}
-                            fill="none"
-                            filter="url(#glow)"
-                            animationDuration={1500}
-                        />
+            {/* 🔥 SRK */}
+            <Area
+              type="monotone"
+              dataKey="building1"
+              name="SRK Academic Complex"
+              stroke="#f59e0b"
+              strokeWidth={isTV ? 8 : 3}
+              fill="none"
+              filter="url(#glow)"
+              dot={false}
+              animationDuration={1500}
+            />
 
-                        <Area
-                            type="monotone"
-                            dataKey="building2"
-                            name="APJ Lab"
-                            stroke="#3b82f6"
-                            strokeWidth={isTV ? 8 : 4}
-                            fill="none"
-                            filter="url(#glow)"
-                            animationDuration={1500}
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </div>
-        </div>
-    );
+            {/* 🔥 APJ */}
+            <Area
+              type="monotone"
+              dataKey="building2"
+              name="APJ Lab"
+              stroke="#3b82f6"
+              strokeWidth={isTV ? 8 : 3}
+              fill="none"
+              filter="url(#glow)"
+              dot={false}
+              animationDuration={1500}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
 }

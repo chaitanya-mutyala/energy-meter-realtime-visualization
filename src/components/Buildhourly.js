@@ -1,39 +1,24 @@
-import { getHourlyUsage } from "../components/Firebasethree.js";
+import { getLoadCurve } from "../components/Firebasethree.js";
 
-export function buildHourlyEnergyData() {
-  const b1 = getHourlyUsage("meter_001");
-  const b2 = getHourlyUsage("meter_002");
+export function buildLoadCurveData() {
+  const b1 = getLoadCurve("meter_001");
+  const b2 = getLoadCurve("meter_002");
 
-  // 1. Pre-fill the map with all 24 hours initialized to 0.
-  // This prevents "holes" in your chart if data is missing for an hour.
-  const map = {};
-  for (let i = 0; i < 25; i++) {
-    const hourLabel = `${i.toString().padStart(2, '0')}:00`;
-    map[hourLabel] = {
-      hour: hourLabel,
-      building1: 0,
-      building2: 0,
-    };
-  }
+  const data = [];
 
-  // 2. Fill Meter 001 data
-  if (Array.isArray(b1)) {
-    b1.forEach((item) => {
-      if (item.time && map[item.time]) {
-        map[item.time].building1 = Number(item.kwh.toFixed(2));
-      }
+  // Generate 96 time labels (15-min intervals)
+  for (let i = 0; i < 96; i++) {
+    const hour = Math.floor(i / 4);
+    const minute = (i % 4) * 15;
+
+    const label = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+
+    data.push({
+      time: label,
+      building1: Number((b1[i] ?? 0).toFixed(2)),
+      building2: Number((b2[i] ?? 0).toFixed(2)),
     });
   }
 
-  // 3. Fill Meter 002 data
-  if (Array.isArray(b2)) {
-    b2.forEach((item) => {
-      if (item.time && map[item.time]) {
-        map[item.time].building2 = Number(item.kwh.toFixed(2));
-      }
-    });
-  }
-
-  // 4. Return sorted values (00:00 to 23:00)
-  return Object.values(map).sort((a, b) => a.hour.localeCompare(b.hour));
+  return data;
 }
