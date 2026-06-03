@@ -98,8 +98,7 @@ async function fetchTodayMeta(db, meterId) {
   /* ---------- 🔥 NEW LOAD CURVE ---------- */
   LOAD_CURVE_CACHE[meterId] =
     meta.yesterday_load_curve || [];
-  console.log(`Loaded load curve for ${meterId}:`, LOAD_CURVE_CACHE[meterId]);
-  console.log(`Meta for ${meterId}:`, meta);
+  
   return meta;
 
 }
