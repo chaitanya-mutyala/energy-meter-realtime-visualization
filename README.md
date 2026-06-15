@@ -1,137 +1,293 @@
 # ⚡ Smart Campus Energy Monitoring & Load Forecasting
-### Real-Time IoT Energy Meter Dashboard + Appwrite Auth + Random Forest Load Prediction
 
-This project is a complete **IoT → Cloud → ML → Web** pipeline developed for **real-time campus energy monitoring** and **short-term load forecasting** at **NIT Andhra Pradesh**.  
-The system collects live electrical parameters from industrial smart meters via **ESP32**, processes predictive analytics using a **FastAPI + Random Forest** model on **Render**, and visualizes the results on a **React dashboard**.
+A real-time IoT-based Smart Campus Energy Monitoring System developed at NIT Andhra Pradesh for monitoring and forecasting electrical energy consumption across campus buildings.
+![Dashboard](./assets/dashboard.png)
+The system collects live electrical parameters from industrial smart energy meters installed at the **SRK Academic Complex** and **APJ Abdul Kalam Laboratory Complex**, stores the data in Firebase Realtime Database, performs machine learning-based load forecasting using a FastAPI service deployed on Render, and visualizes real-time and predicted energy trends through a React dashboard.
 
 ---
 
 ## 🚀 Live Demo & Repository
 
-| Aspect | Link |
-|--------|------|
-| 🔗 **Live Dashboard** | [https://energy-meter-realtime-visualization.vercel.app/](https://energy-meter-realtime-visualization.vercel.app/) |
-| 📂 **GitHub Repository** | [https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization](https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization) |
-| 👤 **Developer** | *Chaitanya Mutyala* |
+| Resource | Link |
+|-----------|------|
+| 🌐 Live Dashboard | https://energy-meter-realtime-visualization.vercel.app/ |
+| 📂 GitHub Repository | https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization |
 
 ---
 
-# 📘 Project Overview
+## 📖 Project Overview
 
-The project delivers a **smart campus energy monitoring system** integrating:
+The project was developed as a real-world smart campus energy management solution for NIT Andhra Pradesh.
 
-- **Hardware**: Industrial Modbus meters + RS485 Transceivers + ESP32.
-- **Data Layer**: **Firebase Realtime Database** for live telemetry storage.
-- **Intelligence**: **FastAPI** backend hosted on **Render** running a **Random Forest** regression model.
-- **Automation**: Daily **Cloud Functions** trigger the ML pipeline to predict the next 24 hours of load.
-- **Frontend**: **React (Vite)** dashboard with **Appwrite** secure authentication.
+The system continuously monitors energy consumption from:
 
----
+- 🏢 SRK Academic Complex
+- 🏢 APJ Abdul Kalam Laboratory Complex
 
-# 🔌 IoT Hardware Architecture & Data Pipeline
+using industrial-grade Modbus smart meters and provides:
 
-### 1️⃣ Smart Energy Meter (Industrial-Grade)
-Measures: Voltage, Current, Active Power (kW), Power Factor, Energy (kWh), Reactive Power (kVAR), Apparent Power (kVA), and Frequency.
-
-### 2️⃣ ESP32 – Unified Modbus Master & Cloud Gateway
-- **Modbus RTU**: Polls registers every 60 seconds via MAX3485 TTL-to-RS485 transceiver.
-- **WiFi Gateway**: Pushes validated JSON payloads to Firebase with <2s end-to-end latency.
-
-### 3️⃣ Cloud Intelligence & ML Pipeline
-- **FastAPI (Hosted on Render)**: A high-performance Python API that serves as the compute engine for forecasting.
-- **Machine Learning**: A **Random Forest Regressor** trained on historical campus data to handle non-linear load patterns.
-- **Workflow**: A scheduled **Cloud Function** pings the FastAPI endpoint once every 24 hours. The model generates 96 data points (15-min intervals) for the next day and syncs them to Firebase.
+- Real-time monitoring
+- Historical energy analytics
+- Building-wise energy comparison
+- Daily and monthly consumption tracking
+- Machine learning-based load forecasting
+- Peak demand visualization
 
 ---
 
-# 🔐 Appwrite Authentication
+## 🏗 System Architecture
 
-The platform supports secure user management via **Appwrite Integration**.
-- **Features**: User Signup, Email/Password Login, and JWT-based session persistence.
-- **Security**: Protected routes ensure the dashboard is only accessible to authenticated users.
+### Hardware Layer
+
+- Industrial Smart Energy Meter
+- RS485 Communication Interface
+- MAX3485 RS485-to-TTL Converter
+- ESP32 Microcontroller
+
+### Cloud Layer
+
+- Firebase Realtime Database
+- Firebase Authentication
+- Firebase Cloud Functions
+
+### Machine Learning Layer
+
+- FastAPI Prediction Service
+- Random Forest Regressor
+- Render Cloud Deployment
+
+### Frontend Layer
+
+- React
+- Vite
+- Tailwind CSS
+- Recharts
 
 ---
 
-# 📊 Machine Learning Forecasting
+## ⚡ Project Flow
 
-The system provides a visual "AI Forecast" to assist in peak demand management.
-
-### 🔮 Algorithms
-- **Random Forest Regressor** (Current Primary Model)
-- **Linear Regression** (Baseline)
-- **LSTM Neural Networks** (Future Integration)
-
-### 📈 Operational Logic
-The model accounts for time-of-day, day-of-week, and historical peaks to project the load curve. This allows facility managers to anticipate high-load periods before they occur.
-
-
-
----
-
-# 🏗 Project Structure
-
+```text
+Smart Energy Meter
+        │
+        ▼
+RS485 (Modbus RTU)
+        │
+        ▼
+MAX3485 Converter
+        │
+        ▼
+ESP32 Gateway
+        │
+        ▼
+Firebase Realtime Database
+        │
+        ▼
+Cloud Function Trigger
+        │
+        ▼
+FastAPI ML Service (Render)
+        │
+        ▼
+Random Forest Prediction
+        │
+        ▼
+Forecast Data Stored in Firebase
+        │
+        ▼
+React Dashboard Visualization
 ```
-energy-meter-realtime-visualization/
-│── public/
-│── src/
-│   ├── components/
-│   ├── pages/
-│   ├── charts/
-│   ├── auth/              # Appwrite authentication logic
-│   ├── App.jsx
-│   ├── main.jsx
-│── package.json
-│── README.md
+
+---
+
+## 📊 Parameters Monitored
+
+The system continuously collects and visualizes:
+
+- Voltage (V)
+- Current (A)
+- Active Power (kW)
+- Reactive Power (kVAR)
+- Apparent Power (kVA)
+- Power Factor
+- Frequency (Hz)
+- Energy Consumption (kWh)
+
+---
+
+## 📈 Dashboard Features
+
+### Real-Time Monitoring
+
+- Live Active Power Monitoring
+- Reactive Power Monitoring
+- Apparent Load Monitoring
+- Voltage and Current Tracking
+- Power Factor Monitoring
+- Frequency Monitoring
+
+### Energy Analytics
+
+- Daily Energy Consumption
+- Monthly Energy Consumption
+- Historical Trends
+- Building-wise Comparison
+- Peak Load Monitoring
+
+### Load Forecasting
+
+- Day-ahead Load Prediction
+- Forecast Visualization
+- Predicted Demand Trends
+- Future Load Curve Analysis
+
+---
+
+## 🤖 Machine Learning Forecasting
+
+A Random Forest Regression model is used to predict short-term building load demand based on historical consumption data.
+
+### Forecasting Workflow
+
+1. Historical load data is collected from Firebase.
+2. Data preprocessing and feature engineering are performed.
+3. Random Forest model generates future load predictions.
+4. Predictions are served through a FastAPI endpoint.
+5. Forecast results are stored back into Firebase.
+6. Dashboard displays actual and predicted load curves.
+
+---
+
+## 🔐 Authentication
+
+Firebase Authentication is used for:
+
+- User Registration
+- User Login
+- Session Management
+- Protected Dashboard Access
+
+---
+
+## ☁ Deployment
+
+| Service | Platform |
+|----------|----------|
+| Frontend | Vercel |
+| Backend API | Render |
+| Authentication | Firebase |
+| Database | Firebase Realtime Database |
+| Machine Learning | FastAPI + Scikit-Learn |
+| IoT Gateway | ESP32 |
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Recharts
+
+### Backend
+
+- FastAPI
+- Python
+
+### Machine Learning
+
+- Scikit-Learn
+- Random Forest Regressor
+
+### Cloud
+
+- Firebase Authentication
+- Firebase Realtime Database
+- Firebase Cloud Functions
+- Render
+
+### Hardware
+
+- ESP32
+- MAX3485
+- RS485 Modbus Smart Energy Meter
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/
+├── charts/
+├── pages/
+├── firebase/
+├── services/
+├── App.jsx
+└── main.jsx
 ```
 
 ---
 
-# 🛠 Installation & Setup
+## 🚀 Installation
 
-### 1️⃣ Clone Repository
-```
+### Clone Repository
+
+```bash
 git clone https://github.com/chaitanya-mutyala/energy-meter-realtime-visualization
 cd energy-meter-realtime-visualization
 ```
 
-### 2️⃣ Install Dependencies
-```
+### Install Dependencies
+
+```bash
 npm install
 ```
 
-### 3️⃣ Configure Environment Variables
-Create a `.env` file in project root:
+### Configure Environment Variables
 
-```
-VITE_APPWRITE_URL=
-VITE_APPWRITE_PROJECT_ID=
-VITE_APPWRITE_DATABASE_ID=
-VITE_APPWRITE_COLLECTION_ID=
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_DATABASE_URL=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
 ```
 
-### 4️⃣ Run Project Locally
-```
+### Run Locally
+
+```bash
 npm run dev
 ```
 
 ---
 
-# 🚀 Future Enhancements
+## 🔮 Future Enhancements
 
- 
-- Alerts for high load / anomalies  
-- Manual & automatic report generator (PDF + CSV)  
-- Admin panel with role-based permissions  
-- Energy-saving recommendations using AI  
-
----
-
-# 🤝 Contribution
-
-Contributions are welcome!  
-Feel free to create issues or submit PRs.
+- Campus-wide monitoring for all buildings
+- AI-based anomaly detection
+- Energy consumption alerts
+- Automated PDF/CSV report generation
+- Solar generation integration
+- LSTM and XGBoost forecasting models
+- Energy optimization recommendations
 
 ---
 
-# 📜 License
+## 👨‍💻 Developer
+
+**Chaitanya Mutyala**
+
+B.Tech, Electrical & Electronics Engineering
+
+National Institute of Technology Andhra Pradesh
+
+---
+
+## 📜 License
+
 MIT License
