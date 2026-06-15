@@ -1,7 +1,7 @@
 # ⚡ Smart Campus Energy Monitoring & Load Forecasting
 
 A real-time IoT-based Smart Campus Energy Monitoring System developed at NIT Andhra Pradesh for monitoring and forecasting electrical energy consumption across campus buildings.
-![Dashboard](./assets/dashboard.png)
+![Dashboard](![Dashboard](src/assets/Dashboard.jpg)
 The system collects live electrical parameters from industrial smart energy meters installed at the **SRK Academic Complex** and **APJ Abdul Kalam Laboratory Complex**, stores the data in Firebase Realtime Database, performs machine learning-based load forecasting using a FastAPI service deployed on Render, and visualizes real-time and predicted energy trends through a React dashboard.
 
 ---
